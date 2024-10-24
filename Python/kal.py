@@ -3,7 +3,6 @@
 
 from PyQt5.QtWidgets import QApplication, QWidget
 
-
 class Kalkulator(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
