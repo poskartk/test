@@ -1,7 +1,0 @@
----
-name: witaj w Iszym skrypcie
-become: true
-tasks:
-  - name: task 1
-
-...
