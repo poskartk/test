@@ -1,1 +1,0 @@
-witaj w swiecie dupy!
