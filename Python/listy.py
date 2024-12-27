@@ -15,3 +15,4 @@ print(lista4)
 # mozna je wyswietlac i to bedzie takie cos:
 # ['nie', 'toperz', 123, [1, 2, 3, 'baba jaga patrzy']]
 
+# skonczylem na stornie numer 30! - pobieranie wartosci z list.list
