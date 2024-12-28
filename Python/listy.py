@@ -57,4 +57,77 @@ else:
 
 # modyfikowanie zawartosci listy
 
+lista=[1,2,3,4,5,6,7]
+lista.append(8)        # append doda na koncu listy element 
+print(lista)
+lista.insert(0,"X")    # insert podstawi wskazana wartosc w miejsce 0 indeksu w liscie
+print(lista)
+lista[1]="Y"       
+print(lista)
 
+#wynik oztwisty
+# [1, 2, 3, 4, 5, 6, 7, 8]
+# ['X', 1, 2, 3, 4, 5, 6, 7, 8]
+# ['X', 'Y', 2, 3, 4, 5, 6, 7, 8]
+print('===========')
+
+#kasowanie elementow z listy
+
+lista=[1,0,2,0,3,0,4,0,5,0,6,0,7,0,3]
+del lista[2]   # usuniecie 2gieo elementu czyli 2ki w tym przypadku
+print(lista)
+lista.remove(3)  # usunie tylko pierwsze wystapienie wartosci 3 z listy
+print(lista)
+del lista[0:4]  # skasuje elementy o indeksch 0-3 
+print(lista)
+lista.clear() # kasuje cala zawarosc listy 
+print(lista)
+
+# pokaze:
+# [1, 0, 0, 3, 0, 4, 0, 5, 0, 6, 0, 7, 0, 3]
+# [1, 0, 0, 0, 4, 0, 5, 0, 6, 0, 7, 0, 3]
+# [4, 0, 5, 0, 6, 0, 7, 0, 3]
+# []
+
+# sortowanie i odwracanie list
+
+cos=["pomidor","ogorek","kiwi","jajko","pasztet"]
+cos.sort()
+print(cos)
+# posortuje alfabetycznie na takie cos:
+# ['jajko', 'kiwi', 'ogorek', 'pasztet', 'pomidor']
+# jak byly by licbzy to by posortowala take rosnaco liczby
+# ale jak poalczysz liczy i slowa to tego nie posortuje!
+
+# sortowanie na odwrot
+
+pdk=["Ogórek","Pomidor","Ziemniak","Marchew"]
+pdk.sort()
+pdk.reverse()
+print(pdk)
+# posortuje tak: ['Ziemniak', 'Pomidor', 'Ogórek', 'Marchew']
+# taki sam efekt da ponizsze z uzyciem reverse
+
+pdk=["Ogórek","Pomidor","Ziemniak","Marchew"]
+pdk.sort(reverse=True)
+print(pdk)
+
+# a jak masz rozne typu to np:
+
+furki=[[3,"Renault"],[2,"Citroen"],[1,"Audi"],[4,"Zaporożec"]]
+furki.sort()
+print(furki)
+
+# posortuje to po numerach bo to Isza wartosc:
+# [[1, 'Audi'], [2, 'Citroen'], [3, 'Renault'], [4, 'Zaporożec']]
+
+# a jak chcesz po markach aut posortowac to masz:
+
+from operator import itemgetter  # tylko musisz ta funkcje zaimportowac!
+furki=[[3,"Renault"],[2,"Citroen"],[1,"Audi"],[4,"Zaporożec"]]
+furki.sort(key=itemgetter(1))
+print(furki)
+# wynik taki sam: 
+# [[1, 'Audi'], [2, 'Citroen'], [3, 'Renault'], [4, 'Zaporożec']]
+
+strona 36 koneic!!!
