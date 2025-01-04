@@ -130,4 +130,27 @@ print(furki)
 # wynik taki sam: 
 # [[1, 'Audi'], [2, 'Citroen'], [3, 'Renault'], [4, 'Zaporożec']]
 
-strona 36 koneic!!!
+lista=[1,3,5,8,13,21,34,55,1,1,1,"Batman"]
+print(len(lista))     # pokaze ile jest elementow w liscie w tym przypadku 12
+print(lista.count(1))  # tu pokaze ile razy w liscie wystepuje 1ka czyli 4 razy 
+
+lista=[1,3,5,8,13,21,34,55,1,1,1,"Batman"]
+podlista=lista[2:7]
+print(podlista)
+kopia=lista.copy()
+print(kopia)
+
+# wynik
+# [5, 8, 13, 21, 34]   --> pokaze elementy od 2 do 7 z listy
+# [1, 3, 5, 8, 13, 21, 34, 55, 1, 1, 1, 'Batman']  -> kopiuje cala liste 
+
+# tez moga byc funkcje agregujace czyli suma, max z listy albo minimum
+fib=[1,3,5,8,13,21,34,55]
+print( sum(fib) , max(fib), min(fib) )
+
+# wynik
+# 140 55 1
+
+fib=[1,3,5,8,13,21,34,55]
+print(      fib.index(13))  # -> pokaze element numer 4 z listy czyli liczbe 13
+
