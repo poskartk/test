@@ -1,8 +1,0 @@
----
-- name: Konfiguracja firewalla
-  firewalld:
-    port: '{{ port_www }}/tcp'
-    immediate: yes
-    permanent: yes
-    state: enabled
-

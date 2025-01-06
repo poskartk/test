@@ -1,7 +1,0 @@
----
-# tasks file for www
-- include_tasks: serwis.yml
-- include_tasks: firewall.yml
-- include_tasks: index.yml
-- include_tasks: konfig.yml
-- include_tasks: selinux.yml

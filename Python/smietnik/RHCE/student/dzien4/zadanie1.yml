@@ -1,7 +1,0 @@
-- name: FQDN&CPU
-  hosts: all
-  tasks:
-    - name: wyświetl info
-      debug: 
-       msg: "Na serwerze {{ ansible_fqdn }} jest {{ ansible_processor_vcpus }} procesorów "
-      

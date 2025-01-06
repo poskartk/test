@@ -1,5 +1,0 @@
----
-# vars file for www
-port_www: 8888
-katalog: /www
-sciezka: /etc/httpd/conf/httpd.conf

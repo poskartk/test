@@ -1,7 +1,0 @@
----
-# handlers file for www
-- name: Restart uslugi
-  systemd:
-    name: httpd
-    state: restarted
-

@@ -1,6 +1,0 @@
----
-- name: wywołanie roli users
-  hosts: all
-  
-  roles:
-    - users
