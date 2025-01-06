@@ -1,0 +1,4 @@
+users:
+- { imie: "krzysztof", grupa: "grupa" }
+- { imie: "leszek", grupa: "grupa" }
+- { imie: "daniel", grupa: "grupa" }

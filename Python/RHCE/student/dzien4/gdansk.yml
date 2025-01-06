@@ -1,0 +1,26 @@
+---
+- name: Instalacja paczek na gdansku
+  hosts: all
+  vars:
+    paczki:
+      - php
+      - mariadb-server
+      - httpd
+    paczki1: 
+      - targetcli
+      - iscsi-initiator-utils 
+  tasks:
+    - name: Instalacja Gdańsk
+      dnf:
+         name: '{{ item }}'
+         state: present
+      loop: '{{ paczki }}'
+      when: ansible_hostname == "gdansk"
+
+    - name: Instalacja Poznań
+      dnf:
+         name: '{{ item }}'
+         state: present
+      loop: '{{ paczki1 }}'
+      when: ansible_hostname == "poznan"
+...

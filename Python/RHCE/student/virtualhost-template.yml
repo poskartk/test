@@ -1,0 +1,34 @@
+---
+- name: Implementacja serwera WWW
+  hosts: servers
+  tasks:
+  - name: instalacja pakietu httpd
+    yum:
+     name: httpd
+     state: latest
+  - name: Stworzenie katalogu dla VirtualnegoHosta
+    file:
+     name: "/var/www/{{ ansible_hostname }}"
+     state: directory
+  - name: stworzenie pliku index.html
+    copy:
+     content: "Jestem wirtualnym hostem dla krotkiej nazwy {{ ansible_hostname }}\n"
+     dest: "/var/www/{{ ansible_hostname }}/index.html"
+   
+  - name: firewall dla portu 80/tcp
+    firewalld:
+     port: 80/tcp
+     permanent: yes
+     state: enabled
+     immediate: true
+   
+  - name: stworzenie wirtualnego hosta
+    template:
+     src: virtualhost.j2
+     dest: "/etc/httpd/conf.d/{{ ansible_hostname }}.conf"
+ 
+  - name: restart uslugi
+    service:
+     name: httpd
+     state: restarted
+     enabled: true

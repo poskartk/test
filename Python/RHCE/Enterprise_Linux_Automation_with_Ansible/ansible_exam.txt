@@ -1,0 +1,114 @@
+
+
+1. Na wroclawiu, katowicach, poznaniu oraz gdansku stworz usera ansible z mozliwoscia wykonania sudo (uprawnienia roota)
+
+2. Na wroclawiu przygotuj klucze ssh i skopiuj je na pozostale wirtualki dla usera ansible
+
+3. Zmodyfikuj plik ansible.cfg:
+- polaczenie ansible powinno sie odbywac na usera ansible
+- dodaj:
+    - sciezke do inventory
+    - logowanie wynikow ansible
+- dodaj podniesienie uprawnien na uzytkownika root
+    podniesienie uprawnien ma byc defaultowo wlaczone
+- wlacz pipelining
+
+4. Za pomoca komendy ad-hoc sprawdz polaczenie ze wszystkimi wirtualkami
+
+5. Stworz skrypt z komendami ad-hoc:
+    - dodaj grupe admin
+    - dodaj userow: bob i john nalezacych do dodatkowej grupy admin
+    - stworz katalog /share nalezacy do boba i grupy admin
+    - do katalogu /share maja miec wszelkie mozliwe uprawnienia tylko uzytkownik i grupa, pozostali zadnych
+    - w cronie ustaw update systemu na 22:30 w niedziele
+
+
+6. Napisz playbooka, ktory na poznaniu:
+
+- stworz partycje /dev/vdb1 5G - modul parted
+- stworz volume group vg1 - modul lvg
+- stworz logical volume vol1 - modul lvol
+- stworz folder /samba:
+    - wlascicielem ma by {{ TWOJE IMIE }}
+    - prawa dostepu 0777
+- zamontuj /dev/vg1/vol1 w katalogu /samba, filesystem xfs
+- zainstaluj potrzebne paczki: cifs-utils, samba, samba-client 
+    (powinny sie znajdowac w osobnym pliku vars/paczki.yml - jesli playbook bedzie gotowy plik zaszyfruj ansible-vault)
+- uruchom service smb i nmb (wykorzystaj petle loop)
+- skonfiguruj firewalla - service=samba
+- przygotuj plik jinja2 o nazwie info.j2:
+    Witaj w udziale SAMBA na serwerze {{ ansible_hostname }}
+    Lista moich urzadzen: {{ ansible_devices }}
+    {% if ansible_enp1s0.active == True %}
+    IP = {{ ansible_enp1s0.ipv4.address }}
+    {% endif %}
+- skopiuj plik info.j2 do katalogu /samba/info
+
+7. Napisz role dla Samba na poznaniu:
+
+- SELinux
+  zmien kontext selinuxa dla folderu /samba na samba_share_t - modul sefcontext
+- zrob restore kontekstow SELinuxa, trzeba uzyc komendy restorecon -Rv
+- pokaz w module debug zmiane kontekstow SELinuxa
+- Skonfiguruj plik /etc/samba/smb.conf - ma wygladac tak:
+    [global]
+    map to guest = bad user
+
+    [ansible_samba]
+    path = /samba
+    comment = Ansible - udzial samby
+    browseable = yes
+    guest ok = yes
+    
+- zrob restart service smb tylko i wylacznie wtedy jesli zmienil sie plik /etc/samba/smb.conf
+
+8. montowanie udzialu samba na gdansku:
+
+Na gdansku
+1. stworz katalog /mnt/samba
+2. zainstaluj paczki: cifs-utils, samba-client
+3. zamontuj udzial samby //poznan/ansible_samba w katalogu /mnt/samba
+
+
+
+=============================================================================================
+<<< Rozwiazanie >>>
+>>> 1-5 <<<<<
+
+[ansible@wroclaw ~]$ cat invent.cfg 
+[serv]
+katowice
+poznan
+gdansk
+
+[www]
+poznan
+
+[tom]
+gdansk
+-----------
+[ansible@wroclaw ~]$ cat ansible.cfg 
+[defaults]
+inventory = /home/ansible/invent.cfg
+pipelining = True
+log_path = /tmp/ansible.log
+
+[privilege_escalation]
+become=True
+remote_user=ansible
+become_method=sudo
+become_user=root
+become_ask_pass=False
+-----------
+
+[ansible@wroclaw ~]$ cat script.sh 
+#!/bin/bash
+ansible all -m ping
+ansible all -m group -a 'name=admin state=present'
+ansible all -m user -a 'name=bob groups=admin'
+ansible all -m file -a 'path=/share state=directory owner=bob group=admin mode=0770'
+ansible all -m cron -a 'name="yum update" weekday="0" minute="30" hour="22" job="yum update"'
+
+
+>>> 6 <<<<<
+

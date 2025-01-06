@@ -1,0 +1,19 @@
+---
+- name: Tworzenie uzytkownikow
+  hosts: servers
+  vars:
+   users:
+    - lolek
+    - bolek
+    - krzysiek
+  tasks:
+   - name: Informacja
+     debug:
+      msg: "Uzytkownicy ktorzy beda dostepni w systemie to: {{ users | join(', ') }}"
+# msg: "Uzytkownicy ktorzy beda dostepni w systemie to: {{ users }}"
+   - name: Tworzenie uzytkownikow
+     user:
+      name: "{{ item }}"
+      state: present
+      password: "{{ ( item + '123' ) | password_hash('sha512') }}"
+     loop: "{{ users }}"

@@ -1,0 +1,12 @@
+---
+- name: Debugowanie
+  hosts: poznan
+  tasks:
+    - name: Id usera
+      shell: id
+      register: uzytkownik
+
+    - name: Pokaz zmienna
+      debug:
+        var: uzytkownik.stdout
+

@@ -1,0 +1,21 @@
+---
+# tasks file for users
+- name: tworzenie groupy {{ grupa }}
+  group:
+    name: '{{ grupa }}'
+    state: present
+
+- name: tworzenie usera {{ uzytkownik }}
+  user:
+    name: '{{ uzytkownik }}'
+    state: present
+    group: '{{ grupa }}'
+
+- name: kopiowanie plikow
+  copy:
+    src: '{{ item }}'
+    dest: '/home/{{ uzytkownik }}'
+  loop:
+    - plik1
+    - plik2
+

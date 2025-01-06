@@ -1,0 +1,27 @@
+---
+- name: Zarzadzanie users - groups
+  become: True
+  hosts: servers
+  vars:
+    users:
+
+      - imie: "jan"
+        grupa: "administrator"
+      - imie: "janek"
+        grupa: "admin"
+  tasks:
+    
+    - name: Tworzenie grupy
+      group:
+       name: '{{ item }}'
+       state: present
+      loop:
+       - administrator
+       - admin
+
+    - name: Tworzenie userow
+      user:
+       name: '{{ item.imie }}'
+       state: present
+       group: '{{ item.grupa }}'
+      loop: '{{ users }}'

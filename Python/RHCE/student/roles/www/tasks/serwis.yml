@@ -1,0 +1,15 @@
+---
+- name: Instalacja paczki
+  dnf:
+    name: '{{ item }}'
+    state: latest
+  loop:
+    - httpd
+    - policycoreutils-python-utils
+
+- name: Uruchomienie serwisu
+  systemd:
+    name: httpd
+    state: started
+    enabled: yes
+

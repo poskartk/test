@@ -1,0 +1,7 @@
+---
+- name: Wywolanie roli www
+  hosts: poznan
+  
+  roles:
+    - www
+

@@ -1,0 +1,24 @@
+---
+- name: Testowanie taskow
+  hosts: poznan
+  vars:
+   package: samba
+  tasks:
+   - block: 
+      - name: instalacja pakietu
+        yum:
+         name: "{{ package }}"
+         state: latest
+  
+     rescue:
+      - name: informacja1
+        debug:
+          msg: "Uruchamiam sie tylko ratunkowo, jak wczesniejsze zadanie z bloku zakonczy sie bledem"
+  
+     always:
+        - name: informacja2
+          debug:
+           msg: "A ja uruchamiam sie zawsze!"
+        - name: kolejne zadanie
+          debug:
+            msg: "Kolejne zadanie zostalo uruchomione"

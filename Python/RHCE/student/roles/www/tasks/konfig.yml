@@ -1,0 +1,22 @@
+---
+- name: ZMiana portu na {{ port_www }}
+  lineinfile:
+    path: '{{ sciezka }}'
+    regexp: "^Listen"
+    line: 'Listen {{ port_www }}'
+  notify: Restart uslugi
+
+- name: Zmiana DocumentRoot
+  lineinfile:
+    path: '{{ sciezka }}'
+    regexp: "^DocumentRoot"
+    line: "DocumentRoot {{ katalog }}"
+  notify: Restart uslugi
+
+- name: Nadanie uprawnien do katalogu {{ katalog }}
+  lineinfile:
+    path: '{{ sciezka }}'
+    regexp: '^<Directory "/var/www/html">'
+    line: "<Directory {{ katalog }}>"
+  notify: Restart uslugi
+

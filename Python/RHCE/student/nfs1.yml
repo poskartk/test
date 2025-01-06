@@ -1,0 +1,94 @@
+---
+- name: Instalacja oprogramowania dla NFS
+  hosts: all
+  tasks:
+    - name: Instalacja nfs-utils
+      dnf:
+        name: nfs-utils
+        state: latest
+
+- name: Wdrozenie serwera NFS
+  hosts: poznan
+  tasks:
+    - name: Tworzenie partycji
+      parted:
+        device: /dev/vdb
+        number: 1
+        flags: [ lvm ]
+        state: present
+        part_end: 2GiB
+
+    - name: Tworzenie Volume Group
+      lvg:
+        vg: vg1
+        pvs: /dev/vdb1
+
+    - name: Tworzenie Logical Volume
+      lvol:
+        vg: vg1
+        lv: lvm1
+        size: 100%FREE
+    
+    - name: Tworzenie filesystemu
+      filesystem:
+        fstype: ext4
+        dev: /dev/vg1/lvm1
+
+    - name: Tworzenie katalogu pod export
+      file:
+        path: /nfs
+        state: directory
+
+    - name: MOntowanie LVM
+      mount:
+        src: /dev/vg1/lvm1
+        path: /nfs
+        fstype: ext4
+        state: mounted
+
+    - name: Konfiguracja firewalld
+      firewalld:
+        service: nfs
+        immediate: yes
+        permanent: yes
+        state: enabled
+
+    - name: Startowanie serwisu NFS
+      service:
+        name: nfs-server
+        state: started
+        enabled: yes
+
+    - name: Edycja pliku /etc/exports
+      copy:
+        dest: /etc/exports
+        content: "/nfs   *(ro)"
+      notify: exportfs
+
+  handlers:
+    - name: exportfs
+      shell: 'exportfs -rv'
+
+- name: Montowanie udziału NFS na wroclaw
+  hosts: wroclaw
+  tasks:
+    - name: Tworzenie katalogu /mnt/nfs
+      file:
+        path: /mnt/nfs
+        state: directory
+
+    - name: Wpis udzialu NFS do /etc/fstab
+      mount:
+        path: /mnt/nfs
+        src: poznan:/nfs
+        fstype: nfs
+        state: mounted
+
+    - name: Sprawdzanie konfiguracji
+      shell: cat /mnt/nfs/plik1
+      register: plik_nfs
+
+    - name: Wyswietlanie pliku z NFS
+      debug:
+        var: plik_nfs.stdout
+

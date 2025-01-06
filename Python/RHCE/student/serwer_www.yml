@@ -1,0 +1,44 @@
+---
+- name: Konfiguracja serwera www – PLAY 1
+  hosts: servers
+  become: True
+  tasks:
+    - name: Instalacja oprogramowania
+      dnf:
+        name: httpd
+        state: latest
+
+    - name: Uruchomienie service
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+        ignore_errors: yes
+    
+    - name: Plik index.html
+      copy:
+        dest: /var/www/html/index.html
+        content: "Witaj w swiecie Ansible"
+
+    - name: Konfiguracja fiewalld
+      firewalld:
+        service: http
+        immediate: yes
+        permanent: yes
+        state: enabled
+
+- name: Sprawdzanie stanu serwera www – PLAY 2
+  hosts: localhost
+  become: False
+  tasks:
+    - name: Zwrocenie contentu strony
+      uri:
+        url: http://poznan
+        return_content: yes
+        status_code: 200
+        register: www_content
+
+    - name: Wyswietlanie contentu
+      debug:
+        var: www_content.content
+...

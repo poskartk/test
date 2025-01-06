@@ -1,0 +1,8 @@
+---
+- name: Instalacja lub dezinstalacja requestowanego pakietu ze zdalnego hosta
+  hosts: gdansk
+  tasks:
+   - name: Zainstaluj requestowany pakiet
+     yum:
+      name: "{{ ansible_local['custom']['requests']['package'] }}"
+      state: "{{ ansible_local['custom']['requests']['state'] }}"

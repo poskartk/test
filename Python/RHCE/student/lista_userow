@@ -1,0 +1,3 @@
+users:
+- { imie: "bob", grupa: "administrator" }
+- { imie: "ken", grupa: "admiinstrator" }

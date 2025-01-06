@@ -1,0 +1,55 @@
+---
+- name: Konfiguracja serwera ssh na porcie 2222
+  become: True
+  hosts: poznan
+  tasks:
+    
+    - name: Wlaczenie SELinux w trybie Enforcing po reboocie
+      selinux:
+        policy: targeted
+        state: enforcing
+    
+    - name: Wlaczenie SELinux
+      shell: setenforce 1
+    
+    - name: Zabezpieczenie przed logowaniem na konto root
+      lineinfile:
+        regexp: "^PermitRootLogin"
+        line: "PermitRootLogin no"
+        path: /etc/ssh/sshd_config
+      notify: restart_sshd
+    
+    - name: Wylaczenie uwierzytelniania przez haslo
+      lineinfile:
+        regexp: "^PasswordAuthentication"
+        line: "PasswordAuthentication no"
+        path: /etc/ssh/sshd_config
+      notify: restart_sshd
+    
+    - name: Zmiana port sshd na 2222
+      lineinfile:
+        regexp: "^#Port 22"
+        line: "Port 2222"
+        path: /etc/ssh/sshd_config
+      notify: restart_sshd
+    
+    - name: Konfiguracja firewalld
+      firewalld:
+        port: 2222/tcp
+        permanent: yes
+        immediate: yes
+        state: enabled
+    
+    - name: Zmiana polityki portu 2222
+      seport:
+        setype: ssh_port_t
+        ports: 2222
+        state: present
+        proto: tcp
+  handlers:
+   
+   - name: restart_sshd
+     service:
+       name: sshd
+       state: restarted
+...       

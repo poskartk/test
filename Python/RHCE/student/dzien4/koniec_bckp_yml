@@ -1,0 +1,23 @@
+---
+- name: Tworzenie grupy i userow
+  hosts: all
+  vars:
+    uzytkownik:
+     - bobek
+     - tyjek
+     - lonek
+  tasks:
+   - name: Tworzenie grupy {{grupa}}
+     group:
+        name: 'administrator'
+        gid: 3000
+        state: present
+   - name: Tworzenie usera {{uzytkownik}}
+     user:
+        name: '{{item}}'
+        group: 'administrator'
+        state: present
+     loop: '{{uzytkownik}}'
+   - name: Wyswietlacz
+     shell:
+             cmd: cat /etc/passwd | grep bob

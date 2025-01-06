@@ -1,0 +1,13 @@
+---
+- name: Wdrozenie serwisu www
+  hosts: all
+  tasks:
+    - name: Instalacja apache
+      dnf:
+        name: httpd
+        state: present
+      when: 
+       - ansible_memfree_mb >= 1200 
+       - ansible_distribution == "Rocky"
+
+

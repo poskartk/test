@@ -1,0 +1,28 @@
+---
+- name: Instalacja serwera MariaDB na hostach spelniajacych warunki
+  hosts: servers
+  vars:
+   min_ram_mb: 200
+   supported_distros:
+    - Debian
+    - RedHat
+    - CentOS
+  tasks:
+   - name: instalacja pakietu mariadb
+     yum:
+      name: mariadb
+      state: latest
+     when:
+      - ansible_memtotal_mb >= min_ram_mb
+      - ansible_distribution in supported_distros
+
+   - name: informacje o RAM
+     debug:
+       msg: "{{ inventory_hostname }} posiada za malo RAMu - {{ ansible_memtotal_mb }}MB a powinno byc minimum {{ min_ram_mb }}MB"
+     when:
+      - ansible_memtotal_mb < min_ram_mb
+   - name: informacje o distro
+     debug:
+       msg: "{{ inventory_hostname }} jest {{ ansible_distribution }} ktory nie jest supportowany a supportowane sa tylko {{ supported_distros }}"
+     when:
+      - ansible_distribution not in supported_distros

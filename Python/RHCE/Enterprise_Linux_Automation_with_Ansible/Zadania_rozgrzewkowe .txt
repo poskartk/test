@@ -1,0 +1,83 @@
+Zadanie d3:
+  # Napisz playbooka nr 1
+    1. Tworzenie grupy administrator z GID 3000
+    2. Tworzenie userow
+    3. bob i ken maja nalezec do dodatkowej grupy administrator
+    4. Ostatni task w playbooku ma wyswietlic informacje o userze bob 
+
+  # Napisz playbooka nr 2 uzywajac osobnych PLAY lub warunkow :
+    1. Na gdansku zainstaluj paczki: mariadb, httpd, php
+    2. Na poznaniu zainstaluj paczki: targetcli, lftp 
+        
+   
+  # Zadanie ad-hoc
+    1. Znajdz wszystkie pliki wieksze lub rowne 1MB w katalogu /var/log 
+    moduł find
+
+    !!!! rozwiazanie
+      find:
+      paths: /var/log
+      patterns: "^.*?\\.(?:old|log\\.gz)$"
+      size: 10m
+      use_regex: yes
+
+      ansible all -m find -a 'paths=/var/log patterns="*" size=1m'
+
+    2. Zaplanuj reboot systemu za 1min
+    !!! rozwiazanie
+      ansible all -m reboot -a 'reboot_timeout="3600"'
+
+Zadanie d4:
+1. Instalacja i uruchomienie serwisu
+2. Konfiguracja firewalla - nowy port 8080
+3. dodanie nowego folderu /www
+4. Kopiowanie index.html do nowego folderu /www
+5. stworzyc szablon architektura.j2  ## tu ma się dodać info o procesorze itp
+6. Kopiowanie szablonu jinja2 architektura.j2 /www/architektura.hml
+7. Plik konfiguracyjny: /etc/httpd/config/http.conf
+- zmiana portu na 8080 >> Listen 80 na 8080
+- zmiana folderow w konfigu na /www
+  
+      >> '^DocumentRoot "/var/www/html"' na '^DocumentRoot "/www"'
+      >> '^<Directory "/var/www/html">' na '^<Directory "/www">'
+      !!! restart uslugi po takim każdym tasku
+
+9. SELinux 
+    moduły: sefcontext, seport
+    
+    semanage
+      Selinux wymaga: paczki policycoreutils-python-utils
+
+  # tworzenie roli
+  ansible-galaxy init www
+
+  # uzyć metody include_tasks:
+    include_tasks: <file_name>              *** dodanie pliku np kiedy mamy kilka plikow dla taskow
+
+      example:
+        tasks
+          |__main.yml
+          |__https.yml
+          |__apache.yml
+        
+        main.yml |--->  - include_tasks: https.yml
+                        - include_tasks: apache.yml
+
+Zadanie d5
+Stworz playbooka ktory nie konczy sie jako FAILED:
+
+Tworzacego 3 userow krzysztof, leszek i daniel
+wszyscy maja nalezec do grupy ktora jest okreslona w zewnetrznym pliku jako zmienna 'grupa'
+
+W razie gdy nie ma w systemie grupy o takiej nazwie jak w zmiennej playbook powinien wyswietlic komunikat
+"Niestety brak grupy <NAZWA_GRUPY>"
+
+Niezaleznie od tego czy userzy zostana dodani do grupy czy nie na koncu playbooka powinien sie pojawic komunikat
+"Try harder ;)"
+
+W playbooku nie zamieszczaj taska z dodawaniem grupy
+
+Przetestuj playbooka w sytuacji gdy grupa istnieje jak i nie istnieje
+W razie potrzeby w systemie jest grupa 'student' 
+
+poznan ansible_port=2222 ansible_user=student

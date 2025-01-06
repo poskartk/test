@@ -1,0 +1,15 @@
+---
+- name: Testowanie taskow
+  hosts: gdansk
+  vars:
+    package: sambas
+  tasks:
+    - name: instalacja pakietu {{ package }}
+      yum:
+       name: "{{ package }}"
+       state: latest
+      ignore_errors: true
+   
+    - name: kolejne zadanie
+      debug:
+       msg: "Kolejne zadanie zostalo uruchomione"

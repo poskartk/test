@@ -1,0 +1,11 @@
+---
+- name: Tworzenie katalogu {{ katalog }}
+  file:
+    state: directory
+    path: '{{ katalog }}'
+
+- name: Kopiowanie index.html
+  template:
+    src: index.j2
+    dest: '{{ katalog }}/index.html'
+

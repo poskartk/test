@@ -1,0 +1,26 @@
+---
+- name: tworzenie grup
+  hosts: all
+  tasks:
+    - name:  towrzenie grupy z GUID 3000
+      group:
+        nazwa: administrator
+        guid: 3000
+
+    - name: tworzenia userów bob i ken
+      user:
+        name: '{{ zmienna }}'
+        groups: administrator
+        comment: 'User {{ zmienna }}'
+        state: present
+      loop:
+        - ken
+        - bob  
+    - name: informacja o userze bob
+      shell: id bob
+      register: bob_id
+    
+    - name: pokaż info o bobie
+      debug:
+        var: bob_id.stdout
+...

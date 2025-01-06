@@ -1,0 +1,19 @@
+---
+- name: Zarzadzanie userami i grupami
+  hosts: poznan
+  vars_files: gruposy.yml
+  tasks:
+  
+  - block:
+      - name: Tworzenie userow
+        user:
+         name: '{{ item.imie }}'
+         state: present
+         group: '{{ item.grupa }}'
+        loop: '{{ users }}'
+    
+    rescue:
+      - name: info
+        debug:
+         msg: "Try Harder"
+

@@ -1,0 +1,7 @@
+- name: FQDN&CPU
+  hosts: servers
+  tasks:
+    - name: wyświetl info
+      debug: 
+       msg: "{{ ansible_fqdn }} {{ ansible_default_ipv4.address }} {{ ansible_memory_mb.real.total }}"
+      
