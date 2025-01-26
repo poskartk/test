@@ -1,0 +1,35 @@
+# ToDo
+
+## co warto poznać
+  - ansible - od tego nie uciekniesz
+  - certyfikaty TLS, postaw własne CA, np. https://github.com/OpenVPN/easy-rsa
+  - python, przynajmniej podstawy
+
+## jak?
+
+### ansible
+  - postaw dwa, trzy serwery wirtualne na maku, via utmapps
+  - np. zbuduj serwer www z wordpressem, http, php i mariadb,
+  - skonfiguruj je od zera tylko via ansible,
+  - korzystaj z modułów ansiblowych, nie z command czy shell
+  - sam szukaj w dokumentacji, nie uzywaj copilota! to ważne
+  Na koniec masz umieć budować role, odporne na błędy, idempodentne.
+  Gdy to opanujesz, to idź do cl po podwyżkę i awans.
+
+### certyfikaty
+  - postaw własne CA
+  - wygeneruj certyfikaty dla swoich serwerów wirtualnych
+  - certyfikaty zainstaluj via ansible
+  - przećwicz keystore PKCS12, PKCS7
+  Na koniec masz rozumieć co to klucz prywatny, publiczny, łańcuch certyfikacji, SAN.
+  Ponadto jak zarządzać certyfikatami w keystorach.
+  Wszystko co trzeba by zrozumieć masz na mojej stronie.
+  Doucz się o OCSP i letsEncrypt, będziesz najlepszy na piętrze.
+  
+
+### python
+  - wymyśl sobie aplikację, małą, np. sortowanie zdań w pliku
+  - zacznij pisać sam, korzystając z dokumentacji
+  - korzystaj z modułów
+  - poznaj pypi
+  Na koniec masz rozumieć składnię pythona i móc przejrzeć skrypty MDS, nic wielkiego
